@@ -19,12 +19,75 @@ const API_TOKEN = "PasteYourApiTokenHere";
 /* ========================================== */
 // [Authors] Place all mandatory user-modified variables here
 // - e.g. skill to use, number of times to use, task to use skill on, etc.
+const SPREADSHEET_URL = "";
+const SPREADSHEET_TAB_NAME_QUEUE = "Quest Queue";
+const SPREADSHEET_TAB_NAME_INVENTORY = "Inventory Data";
 
 /* ========================================== */
 /* [Users] Optional customizations to fill in */
 /* ========================================== */
 // [Authors] Place all optional user-modified variables here
 // - e.g. enable/disable notifications, enable/disable script features, etc.
+const USER01_ID = "";//Paste @username here (after "//") for future reference if desired
+const USER01_LAUNCHQUESTS_URL = "";
+const USER02_ID = "";//
+const USER02_LAUNCHQUESTS_URL = "";
+const USER03_ID = "";//
+const USER03_LAUNCHQUESTS_URL = "";
+const USER04_ID = "";//
+const USER04_LAUNCHQUESTS_URL = "";
+const USER05_ID = "";//
+const USER05_LAUNCHQUESTS_URL = "";
+const USER06_ID = "";//
+const USER06_LAUNCHQUESTS_URL = "";
+const USER07_ID = "";//
+const USER07_LAUNCHQUESTS_URL = "";
+const USER08_ID = "";//
+const USER08_LAUNCHQUESTS_URL = "";
+const USER09_ID = "";//
+const USER09_LAUNCHQUESTS_URL = "";
+const USER10_ID = "";//
+const USER10_LAUNCHQUESTS_URL = "";
+const USER11_ID = "";//
+const USER11_LAUNCHQUESTS_URL = "";
+const USER12_ID = "";//
+const USER12_LAUNCHQUESTS_URL = "";
+const USER13_ID = "";//
+const USER13_LAUNCHQUESTS_URL = "";
+const USER14_ID = "";//
+const USER14_LAUNCHQUESTS_URL = "";
+const USER15_ID = "";//
+const USER15_LAUNCHQUESTS_URL = "";
+const USER16_ID = "";//
+const USER16_LAUNCHQUESTS_URL = "";
+const USER17_ID = "";//
+const USER17_LAUNCHQUESTS_URL = "";
+const USER18_ID = "";//
+const USER18_LAUNCHQUESTS_URL = "";
+const USER19_ID = "";//
+const USER19_LAUNCHQUESTS_URL = "";
+const USER20_ID = "";//
+const USER20_LAUNCHQUESTS_URL = "";
+const USER21_ID = "";//
+const USER21_LAUNCHQUESTS_URL = "";
+const USER22_ID = "";//
+const USER22_LAUNCHQUESTS_URL = "";
+const USER23_ID = "";//
+const USER23_LAUNCHQUESTS_URL = "";
+const USER24_ID = "";//
+const USER24_LAUNCHQUESTS_URL = "";
+const USER25_ID = "";//
+const USER25_LAUNCHQUESTS_URL = "";
+const USER26_ID = "";//
+const USER26_LAUNCHQUESTS_URL = "";
+const USER27_ID = "";//
+const USER27_LAUNCHQUESTS_URL = "";
+const USER28_ID = "";//
+const USER28_LAUNCHQUESTS_URL = "";
+const USER29_ID = "";//
+const USER29_LAUNCHQUESTS_URL = "";
+const USER30_ID = "";//
+const USER30_LAUNCHQUESTS_URL = "";
 
 /* ========================================== */
 /* [Users] Do not edit code below this line   */
@@ -122,9 +185,9 @@ function createWebhooks() {
   logInfo("Creating webhooks");
 
   let webhookData = {
-    "type": "taskActivity",
+    "type": "questActivity",
     "options": {
-      "scored": true
+      "questFinished": true
     }
   }
   api_createWebhook(webhookData);
