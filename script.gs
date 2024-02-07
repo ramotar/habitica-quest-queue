@@ -73,20 +73,18 @@ const USER30_LAUNCHQUESTS_URL = "";
 /**
  * Some parts of the following script are from Print Quest Info v4.1.2 and Quest Tracker by @bumbleshoot
  */
-let members;
-let content;
 let spreadsheet = SpreadsheetApp.openById(SPREADSHEET_URL.match(/[^\/]{44}/)[0]);
 
 function doPost(e) {
 
   // get API data
-  members = api_getPartyMembers();
+  let members = api_getPartyMembers();
   if (typeof members === "undefined") {
     members = [api_getUser()];
     console.log("members was undefined")
   }
 
-  writeInventory();
+  writeInventory(members);
 
   let url = getLaunchCode();
   if (url.startsWith('http')) {
@@ -95,7 +93,7 @@ function doPost(e) {
 }
 
 
-function writeInventory() {
+function writeInventory(members) {
   var sheet = spreadsheet.getSheetByName(SPREADSHEET_TAB_NAME_INVENTORY);
 
   let values = [];
