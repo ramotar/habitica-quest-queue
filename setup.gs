@@ -104,6 +104,7 @@ const SCRIPT_NAME = "Quest Queue";
 // - If you want to save values between calls, use PropertiesService
 // - See https://developers.google.com/apps-script/reference/properties/properties-service
 const scriptProperties = PropertiesService.getScriptProperties();
+var spreadsheet = SpreadsheetApp.openById(SPREADSHEET_URL.match(/[^\/]{44}/)[0]);
 
 /* =================================== */
 /* [Authors] Below you find functions, */
