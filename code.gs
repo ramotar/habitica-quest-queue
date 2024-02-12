@@ -18,6 +18,37 @@ function processWebhookDelayed(type, data) {
   // - Here you can take care of heavy work, that may take longer.
   // - It may take up to 30 - 60 seconds for this function to activate
   //   after the webhook was triggered.
+
+  let row = data.row;
+  let party = api_getParty();
+
+  // Check if there is a quest invite
+  if (party.quest.key != undefined) {
+    // Remove the quest from the queue
+    let questQueue = spreadsheet.getSheetByName(SPREADSHEET_TAB_NAME_QUEUE);
+    questQueue.deleteRow(row);
+  }
+  else {
+    notifyUserOfError(
+      new Error(
+        "Quest Queue failed to started the quest in row " + row + ".",
+        { cause: data.error }
+      )
+    );
+
+    // Try launching the next quest in the queue
+    row = row + 1;
+    let result = launchQuestInRow(row);
+
+    if (result !== false) {
+      // Retrigger this function for further processing
+      var trigger = ScriptApp.newTrigger('doPostTriggered').timeBased().after(1).create();
+      CacheService.getScriptCache().put(
+        trigger.getUniqueId(),
+        JSON.stringify(result)
+      );
+    }
+  }
 }
 
 function processTrigger() {
