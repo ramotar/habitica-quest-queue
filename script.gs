@@ -1,9 +1,6 @@
 /* ========================================== */
 /* [Users] Required script data to fill in    */
 /* ========================================== */
-const USER_ID = "";
-const API_TOKEN = "";// Do not share this with anyone
-const WEB_APP_URL = "";
 const SPREADSHEET_URL = "";
 const SPREADSHEET_TAB_NAME_QUEUE = "Quest Queue";
 const SPREADSHEET_TAB_NAME_INVENTORY = "Inventory Data";
@@ -76,19 +73,6 @@ const USER30_LAUNCHQUESTS_URL = "";
 /**
  * Some parts of the following script are from Print Quest Info v4.1.2 and Quest Tracker by @bumbleshoot
  */
-const PARAMS = {
-  "headers": {
-    "x-api-user": USER_ID,
-    "x-api-key": API_TOKEN,
-    "x-client": "7d2dce0e-4197-407b-b40f-8b5530774486-Quest Queue V1"
-  },
-  "muteHttpExceptions": true
-};
-const GET_PARAMS = Object.assign({ "method": "get" }, PARAMS);
-const POST_PARAMS = Object.assign({ "method": "post" }, PARAMS);
-const scriptProperties = PropertiesService.getScriptProperties();
-
-
 let members;
 let content;
 let spreadsheet = SpreadsheetApp.openById(SPREADSHEET_URL.match(/[^\/]{44}/)[0]);
@@ -96,9 +80,9 @@ let spreadsheet = SpreadsheetApp.openById(SPREADSHEET_URL.match(/[^\/]{44}/)[0])
 function doPost(e) {
 
   // get API data
-  members = JSON.parse(fetch("https://habitica.com/api/v3/groups/party/members?includeAllPublicFields=true", GET_PARAMS)).data;
+  members = api_getPartyMembers();
   if (typeof members === "undefined") {
-    members = [JSON.parse(fetch("https://habitica.com/api/v3/user", GET_PARAMS)).data];
+    members = [api_getUser()];
     console.log("members was undefined")
   }
 
@@ -180,55 +164,6 @@ function getLaunchCode() {
   return launchCode;
 }
 
-
-
-/**
- * fetch(url, params) from Print Quest Info v4.1.2 by @bumbleshoot
- *
- * Wrapper for Google Apps Script's UrlFetchApp.fetch(url, params):
- * https://developers.google.com/apps-script/reference/url-fetch/url-fetch-app#fetchurl,-params
- *
- * Retries failed API calls up to 2 times & handles Habitica's rate
- * limiting.
- *
- */
- function fetch(url, params) {
-
-  // try up to 3 times
-  for (let i=0; i<3; i++) {
-
-    // if rate limit reached
-    let rateLimitRemaining = scriptProperties.getProperty("X-RateLimit-Remaining");
-    let rateLimitReset = scriptProperties.getProperty("X-RateLimit-Reset");
-    if (rateLimitRemaining != null && Number(rateLimitRemaining) < 1) {
-
-      // wait until rate limit reset
-      let waitUntil = new Date(rateLimitReset);
-      waitUntil.setSeconds(waitUntil.getSeconds() + 1);
-      let now = new Date();
-      Utilities.sleep(Math.max(waitUntil.getTime() - now.getTime(), 0));
-    }
-
-    // call API
-    let response = UrlFetchApp.fetch(url, params);
-
-    // store rate limiting data
-    scriptProperties.setProperties({
-      "X-RateLimit-Reset": response.getHeaders()["x-ratelimit-reset"],
-      "X-RateLimit-Remaining": response.getHeaders()["x-ratelimit-remaining"]
-    });
-
-    // if success, return response
-    if (response.getResponseCode() < 300 || (response.getResponseCode() === 404 && (url === "https://habitica.com/api/v3/groups/party" || url.startsWith("https://habitica.com/api/v3/groups/party/members")))) {
-      return response;
-
-    // if 3xx or 4xx or failed 3 times, throw exception
-    } else if (response.getResponseCode() < 500 || i >= 2) {
-      throw new Error("Request failed for https://habitica.com returned code " + response.getResponseCode() + ". Truncated server response: " + response.getContentText());
-    }
-  }
-}
-
 /**
  * Create Webhook from "Quest Tracker" by @bumbleshoot
  */
@@ -250,5 +185,5 @@ function createWebhook() {
     "payload": JSON.stringify(webhook)
   }, POST_PARAMS);
 
-  fetch("https://habitica.com/api/v3/user/webhook", webhook);
+  api_fetch("https://habitica.com/api/v3/user/webhook", webhook);
 }
