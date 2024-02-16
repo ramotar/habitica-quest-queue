@@ -9,19 +9,7 @@ function processWebhookInstant(type, data) {
   // - Make sure, that the processing time does not exceed 30 seconds.
   //   Otherwise you risk the deactivation of your webhook.
 
-  // get API data
-  let members = api_getPartyMembers();
-  if (typeof members === "undefined") {
-    members = [api_getUser()];
-    console.log("members was undefined")
-  }
-
-  writeInventory(members);
-
-  let url = getLaunchCode();
-  if (url.startsWith('http')) {
-    UrlFetchApp.fetch(url);
-  }
+  return launchQuestInRow(1);
 }
 
 function processWebhookDelayed(type, data) {
@@ -35,6 +23,59 @@ function processWebhookDelayed(type, data) {
 function processTrigger() {
   // [Authors] This function gets called by the example trigger.
   // - This is the place for recurrent tasks.
+}
+
+function launchQuestInRow(row) {
+  let questQueue = spreadsheet.getSheetByName(SPREADSHEET_TAB_NAME_QUEUE);
+  let questLink = questQueue.getRange(row, 4).getValue().toString();
+
+  let errorString = "";
+
+  try {
+    if (questLink.startsWith("https://script.google.com/macros/s/") && questLink.includes("/exec?questId=")) {
+      let response = UrlFetchApp.fetch(questLink);
+
+      // In case of a successful request, parse the returned message
+      if (parseQuestLinkResponse(response)) {
+        // Quest was successfully started, delete the corresponding row ...
+        questQueue.deleteRow(row);
+        // ... and no further processing needed
+        return false;
+      }
+
+      errorString = response.getContentText();
+    }
+    else {
+      errorString = "Invalid link for launching a quest in row " + row + ": " + (questLink == "" ? "(empty string)" : questLink);
+    }
+  }
+  catch (error) {
+    errorString = error.toString();
+  }
+
+  return {
+    "row": row,
+    "error": errorString
+  }
+}
+
+function parseQuestLinkResponse(response) {
+  let contentText = response.getContentText();
+
+  let result;
+  try {
+    result = JSON.parse(contentText);
+  }
+  catch (error) {
+  }
+
+  if (result != undefined && result.hasOwnProperty("responseCode")) {
+    if (result.responseCode == 200) {
+      return true;
+    }
+  }
+
+  return false;
 }
 
 function updateInventory() {
