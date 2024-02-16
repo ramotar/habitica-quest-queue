@@ -105,7 +105,8 @@ const scriptProperties = PropertiesService.getScriptProperties();
 const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
 const SPREADSHEET_TAB_NAME_QUEUE = "Quest Queue";
 const SPREADSHEET_TAB_NAME_INVENTORY = "Inventory Data";
-const SPREADSHEET_TAB_NAME_TEST = "Inventory";
+const SPREADSHEET_SHEET_NAME_TEST = "Party Inventory";
+const SPREADSHEET_SHEET_NAME_OLDIES = "Old Members";
 const SPREADSHEET_OFFSET_QUEST_ROW = 6;
 const SPREADSHEET_OFFSET_MEMBER_COLUMN = 3;
 
