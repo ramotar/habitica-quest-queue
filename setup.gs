@@ -1,8 +1,10 @@
 /**
- * Example script v1.2.3 by John Doe
+ * Quest Queue v0.0.1 by @Turac
  *
- * See Wiki / GitHub page for info & setup instructions:
- * https://link/to/wiki-or-github/page
+ * Based on Quest Queue with Link (Release 1) by @Snefferdy:
+ * https://habitica.fandom.com/wiki/Quest_Queue
+ *
+ * Ported to the Habitica GAS Template
  */
 
 /* ========================================== */
