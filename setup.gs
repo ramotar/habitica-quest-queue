@@ -19,16 +19,14 @@ const API_TOKEN = "PasteYourApiTokenHere";
 /* ========================================== */
 // [Authors] Place all mandatory user-modified variables here
 // - e.g. skill to use, number of times to use, task to use skill on, etc.
-const SPREADSHEET_URL = "";
-const SPREADSHEET_TAB_NAME_QUEUE = "Quest Queue";
-const SPREADSHEET_TAB_NAME_INVENTORY = "Inventory Data";
+const SPREADSHEET_ID = "";
 
 /* ========================================== */
 /* [Users] Optional customizations to fill in */
 /* ========================================== */
 // [Authors] Place all optional user-modified variables here
 // - e.g. enable/disable notifications, enable/disable script features, etc.
-const USER01_ID = "";//Paste @username here (after "//") for future reference if desired
+const USER01_ID = "";//
 const USER01_LAUNCHQUESTS_URL = "";
 const USER02_ID = "";//
 const USER02_LAUNCHQUESTS_URL = "";
@@ -104,7 +102,12 @@ const SCRIPT_NAME = "Quest Queue";
 // - If you want to save values between calls, use PropertiesService
 // - See https://developers.google.com/apps-script/reference/properties/properties-service
 const scriptProperties = PropertiesService.getScriptProperties();
-var spreadsheet = SpreadsheetApp.openById(SPREADSHEET_URL.match(/[^\/]{44}/)[0]);
+const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
+const SPREADSHEET_TAB_NAME_QUEUE = "Quest Queue";
+const SPREADSHEET_TAB_NAME_INVENTORY = "Inventory Data";
+const SPREADSHEET_TAB_NAME_TEST = "Inventory";
+const SPREADSHEET_OFFSET_QUEST_ROW = 6;
+const SPREADSHEET_OFFSET_MEMBER_COLUMN = 3;
 
 /* =================================== */
 /* [Authors] Below you find functions, */

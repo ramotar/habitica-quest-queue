@@ -37,6 +37,26 @@ function processTrigger() {
   // - This is the place for recurrent tasks.
 }
 
+function updateInventory() {
+  let sheet = spreadsheet.getSheetByName(SPREADSHEET_TAB_NAME_TEST);
+
+  // Update the quest list
+  let content = api_getContent();
+  let questsByLevel = content.questsByLevel;
+
+  for (let i = 0; i < questsByLevel.length; i++) {
+    let quest = questsByLevel[i];
+    let row = SPREADSHEET_OFFSET_QUEST_ROW + i;
+
+    if (sheet.getRange(row, 2).getValue() != quest.key) {
+      sheet.insertRowBefore(row);
+      sheet.getRange(row, 1, 2).setValues([
+        [quest.text, quest.key]
+      ]);
+    }
+  }
+}
+
 function writeInventory(members) {
   var sheet = spreadsheet.getSheetByName(SPREADSHEET_TAB_NAME_INVENTORY);
 
