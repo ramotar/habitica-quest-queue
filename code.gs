@@ -159,7 +159,7 @@ function forceStartQuest(event) {
 function updateInventory() {
   let spreadsheet = openSpreadsheet();
   let queue = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_QUEUE);
-  let sheet = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_INVENTORY);
+  let inventory = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_INVENTORY);
   let oldies = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_OLDIES);
 
   // Update the quest list
@@ -170,9 +170,9 @@ function updateInventory() {
     let quest = questsByLevel[i];
     let row = SPREADSHEET_OFFSET_QUEST_ROW + i;
 
-    if (sheet.getRange(row, 2).getValue() != quest.key) {
-      sheet.insertRowBefore(row);
-      sheet.getRange(row, 1, 2).setValues([
+    if (inventory.getRange(row, 2).getValue() != quest.key) {
+      inventory.insertRowBefore(row);
+      inventory.getRange(row, 1, 2).setValues([
         [quest.text, quest.key]
       ]);
     }
@@ -185,14 +185,14 @@ function updateInventory() {
     let column = SPREADSHEET_OFFSET_MEMBER_COLUMN + i;
 
     // Extract the member currently in this column (aka column-member)
-    let columnMemberID = sheet.getRange(3, column).getValue();
+    let columnMemberID = inventory.getRange(3, column).getValue();
     // While the column-member is not the member in the list
     while (columnMemberID != member.id) {
       // If end of list has been reached or if column-member is still in the party
       if (columnMemberID == "" || partyMembers.some((member) => member.id == columnMemberID)) {
         // Create a new column for the member
-        sheet.insertColumnBefore(column);
-        sheet.getRange(1, column, 3).setValues([
+        inventory.insertColumnBefore(column);
+        inventory.getRange(1, column, 3).setValues([
           [member.profile.name], [member.auth.local.username], [member.id]
         ])
         break;
@@ -201,19 +201,19 @@ function updateInventory() {
         // Column-member left the party, send him to the oldies page
         let lastOldie = oldies.getLastColumn();
         oldies.insertColumnAfter(lastOldie);
-        sheet.getRange(1, column, 4, 1).copyTo(
+        inventory.getRange(1, column, 4, 1).copyTo(
           oldies.getRange(1, lastOldie + 1, 4, 1)
         )
         // Insert a new column at the end and delete the old one
-        sheet.insertColumnBefore(sheet.getMaxColumns());
-        sheet.deleteColumn(column);
+        inventory.insertColumnBefore(inventory.getMaxColumns());
+        inventory.deleteColumn(column);
       }
       // Update column-member ID
-      columnMemberID = sheet.getRange(3, column).getValue();
+      columnMemberID = inventory.getRange(3, column).getValue();
     }
 
     // Update the user name if changed
-    let nameRange = sheet.getRange(1, column);
+    let nameRange = inventory.getRange(1, column);
     if (nameRange.getValue() != member.profile.name) {
       nameRange.setValue(member.profile.name);
     }
@@ -223,19 +223,19 @@ function updateInventory() {
     let column = SPREADSHEET_OFFSET_MEMBER_COLUMN + i;
 
     // Number the members
-    sheet.getRange(5, column).setValue(i + 1);
+    inventory.getRange(5, column).setValue(i + 1);
 
     // Hide users without link
-    if (!sheet.getRange(4, column).getValue().toString().startsWith("https://script.google.com/macros/s/")) {
-      sheet.hideColumns(column);
+    if (!inventory.getRange(4, column).getValue().toString().startsWith("https://script.google.com/macros/s/")) {
+      inventory.hideColumns(column);
     }
   }
 
   // Reduce to maximum 30 member columns
-  let columnNumber = sheet.getMaxColumns();
+  let columnNumber = inventory.getMaxColumns();
   let maxColumnNumber = SPREADSHEET_OFFSET_MEMBER_COLUMN + 30;
   if (columnNumber > maxColumnNumber) {
-    sheet.deleteColumns(maxColumnNumber, columnNumber - maxColumnNumber);
+    inventory.deleteColumns(maxColumnNumber, columnNumber - maxColumnNumber);
   }
 
   // Update quest inventory
@@ -246,7 +246,7 @@ function updateInventory() {
       let member = partyMembers[j];
       let column = SPREADSHEET_OFFSET_MEMBER_COLUMN + j;
 
-      let cell = sheet.getRange(row, column);
+      let cell = inventory.getRange(row, column);
       let questCount = member.items.quests[quest.key];
       if (questCount == undefined) questCount = 0;
 
