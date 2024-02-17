@@ -1,7 +1,7 @@
 /**
- * Quest Queue v0.1.0 by @Turac
+ * Quest Queue v1.0.0 by @Turac
  *
- * Based on Quest Queue with Link (Release 1) by @Snefferdy:
+ * Based on Quest Queue (Release 1) by @Snefferdy:
  * https://habitica.fandom.com/wiki/Quest_Queue
  *
  * Ported to the Habitica GAS Template
@@ -20,7 +20,7 @@ const API_TOKEN = "PasteYourApiTokenHere";
 /* ========================================== */
 // [Authors] Place all mandatory user-modified variables here
 // - e.g. skill to use, number of times to use, task to use skill on, etc.
-const SPREADSHEET_ID = "";
+const SPREADSHEET_ID = "PasteYourSpreadsheetIdHere";
 
 /* ========================================== */
 /* [Users] Optional customizations to fill in */
