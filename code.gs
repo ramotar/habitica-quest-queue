@@ -27,6 +27,11 @@ function processWebhookDelayed(type, data) {
     // Remove the quest from the queue
     let questQueue = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_QUEUE);
     questQueue.deleteRow(row);
+
+    // If the quest is not yet started
+    if (party.quest.active == false) {
+      scheduleForceStart();
+    }
   }
   else {
     notifyUserOfError(
@@ -72,6 +77,8 @@ function launchQuestInRow(row) {
       if (parseQuestLinkResponse(response)) {
         // Quest was successfully started, delete the corresponding row ...
         questQueue.deleteRow(row);
+        // ... schedule a force start ...
+        scheduleForceStart();
         // ... and no further processing needed
         return false;
       }
@@ -109,6 +116,41 @@ function parseQuestLinkResponse(response) {
   }
 
   return false;
+}
+
+function scheduleForceStart() {
+  if (FORCE_START_QUESTS) {
+    var delay = FORCE_START_DELAY * 60 * 1000;
+    ScriptApp.newTrigger('forceStartQuest').timeBased().after(delay).create();
+  }
+}
+
+function forceStartQuest(event) {
+  const triggerId = event.triggerUid;
+
+  // Delete the trigger
+  let triggers = ScriptApp.getProjectTriggers();
+  for (let trigger of triggers) {
+    if (trigger.getUniqueId() === triggerId) {
+      ScriptApp.deleteTrigger(trigger);
+      break;
+    }
+  }
+
+  try {
+    api_fetch("https://habitica.com/api/v3/groups/party/quests/force-start", POST_PARAMS);
+  }
+  catch (error) {
+    let cause = error.cause;
+    if (cause.responseCode == 401 && cause.message == "The quest has already started.") {
+      // Everything is fine, do nothing
+    }
+    else {
+      notifyUserOfError(error);
+      // Re-throw the error
+      throw error;
+    }
+  }
 }
 
 function updateInventory() {

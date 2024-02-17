@@ -26,6 +26,8 @@ const SPREADSHEET_ID = "";
 /* ========================================== */
 // [Authors] Place all optional user-modified variables here
 // - e.g. enable/disable notifications, enable/disable script features, etc.
+const FORCE_START_QUESTS = true;
+const FORCE_START_DELAY = 5;
 
 /* ========================================== */
 /* [Users] Do not edit code below this line   */
@@ -196,6 +198,16 @@ function validateOptions() {
   // test credentials
   if (valid) {
     valid = testCredentials();
+  }
+
+  if (typeof FORCE_START_QUESTS !== "boolean") {
+    logError("FORCE_START_QUESTS must be a boolean value.\n\ne.g. const FORCE_START_QUESTS = false;");
+    valid = false;
+  }
+
+  if (typeof FORCE_START_DELAY !== "number" || !Number.isSafeInteger(FORCE_START_DELAY) || FORCE_START_DELAY <= 0) {
+    logError("FORCE_START_DELAY must be an integer value greater zero,\ndenoting the number of minutes between quest invitation and force start.\n\ne.g. const FORCE_START_DELAY = 5;");
+    valid = false;
   }
 
   if (!valid) {
