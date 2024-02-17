@@ -116,6 +116,24 @@ function updateInventory() {
   if (columnNumber > maxColumnNumber) {
     sheet.deleteColumns(maxColumnNumber, columnNumber - maxColumnNumber);
   }
+
+  // Update quest inventory
+  for (let i = 0; i < questsByLevel.length; i++) {
+    let quest = questsByLevel[i];
+    let row = SPREADSHEET_OFFSET_QUEST_ROW + i;
+    for (let j = 0; j < partyMembers.length; j++) {
+      let member = partyMembers[j];
+      let column = SPREADSHEET_OFFSET_MEMBER_COLUMN + j;
+
+      let cell = sheet.getRange(row, column);
+      let questCount = member.items.quests[quest.key];
+      if (questCount == undefined) questCount = 0;
+
+      if (cell.getValue() != questCount) {
+        cell.setValue(questCount);
+      }
+    }
+  }
 }
 
 function writeInventory(members) {
