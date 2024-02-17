@@ -176,7 +176,7 @@ function forceStartQuest(event) {
   }
 
   try {
-    api_fetch("https://habitica.com/api/v3/groups/party/quests/force-start", POST_PARAMS);
+    api_forceStartQuest();
   }
   catch (error) {
     let cause = error.cause;
