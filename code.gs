@@ -20,6 +20,8 @@ function processWebhookDelayed(type, data) {
   //   after the webhook was triggered.
 
   let row = data.row;
+  let spreadsheet = openSpreadsheet();
+
   let party = api_getParty();
 
   // Check if there is a quest invite
@@ -43,7 +45,7 @@ function processWebhookDelayed(type, data) {
 
     // Try launching the next quest in the queue
     row = row + 1;
-    let result = launchQuestInRow(row);
+    let result = launchQuestInRow(row, spreadsheet);
 
     if (result !== false) {
       // Retrigger this function for further processing
@@ -63,7 +65,8 @@ function processTrigger() {
   updateInventory();
 }
 
-function launchQuestInRow(row) {
+function launchQuestInRow(row, spreadsheet = null) {
+  spreadsheet = (spreadsheet ? spreadsheet : openSpreadsheet());
   let questQueue = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_QUEUE);
   let questLink = questQueue.getRange(row, 4).getValue().toString();
 
@@ -154,6 +157,7 @@ function forceStartQuest(event) {
 }
 
 function updateInventory() {
+  let spreadsheet = openSpreadsheet();
   let queue = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_QUEUE);
   let sheet = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_INVENTORY);
   let oldies = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_OLDIES);
@@ -262,4 +266,8 @@ function updateInventory() {
     let lastRow = queue.getRange(rowCount, 1, 1, queue.getMaxColumns());
     lastRow.copyTo(queue.getRange(rowCount + 1, 1, 1000 - rowCount));
   }
+}
+
+function openSpreadsheet() {
+  return SpreadsheetApp.openById(SPREADSHEET_ID);
 }

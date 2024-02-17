@@ -44,7 +44,6 @@ const SCRIPT_NAME = "Quest Queue";
 // - If you want to save values between calls, use PropertiesService
 // - See https://developers.google.com/apps-script/reference/properties/properties-service
 const scriptProperties = PropertiesService.getScriptProperties();
-const spreadsheet = SpreadsheetApp.openById(SPREADSHEET_ID);
 const SPREADSHEET_SHEET_NAME_QUEUE = "Quest Queue";
 const SPREADSHEET_SHEET_NAME_INVENTORY = "Party Inventory";
 const SPREADSHEET_SHEET_NAME_OLDIES = "Old Members";
@@ -198,6 +197,31 @@ function validateOptions() {
   // test credentials
   if (valid) {
     valid = testCredentials();
+  }
+
+  if (typeof SPREADSHEET_ID !== "string" ) {
+    logError("SPREADSHEET_ID must be a string equal to the ID of the Quest Queue sheet.\n\ne.g. const SPREADSHEET_ID = \"abc1234567\";\n\nYour Spreadsheet ID can be found in the sheet URL between /d/ ... /edit");
+    valid = false;
+  }
+  else {
+    let spreadsheet;
+    try {
+      spreadsheet = openSpreadsheet();
+    }
+    catch (error) {
+      logError("The spreadsheet with your given SPREADSHEET_ID could not be opened.\n\nMake sure that the ID belongs to a valid Quest Queue spreadsheet.\n\nYour Spreadsheet ID can be found in the sheet URL between /d/ ... /edit");
+      valid = false;
+    }
+
+    // Check for all the sheets
+    let queue = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_QUEUE);
+    let inventory = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_INVENTORY);
+    let oldies = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_OLDIES);
+
+    if (queue == null || inventory == null || oldies == null) {
+      logError("The spreadsheet with your given SPREADSHEET_ID does not contain all necessary sheets.\n\nMake sure that the ID belongs to a valid Quest Queue spreadsheet.\n\nYour Spreadsheet ID can be found in the sheet URL between /d/ ... /edit");
+      valid = false;
+    }
   }
 
   if (typeof FORCE_START_QUESTS !== "boolean") {
