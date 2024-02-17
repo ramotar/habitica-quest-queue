@@ -21,40 +21,75 @@ function processWebhookDelayed(type, data) {
 
   let row = data.row;
   let spreadsheet = openSpreadsheet();
+  let questQueue = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_QUEUE);
+  let questId = questQueue.getRange(row, 2).getValue().toString();
+  let userId = questQueue.getRange(row, 5).getValue().toString();
 
   let party = api_getParty();
+  let quest = party.quest;
 
-  // Check if there is a quest invite
-  if (party.quest.key != undefined) {
+  // Check if the right quest got launched
+  if (quest.leader == userId && quest.key == questId) {
     // Remove the quest from the queue
-    let questQueue = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_QUEUE);
     questQueue.deleteRow(row);
 
     // If the quest is not yet started
-    if (party.quest.active == false) {
+    if (!quest.active) {
       scheduleForceStart();
     }
+
+    return;
   }
-  else {
-    notifyUserOfError(
-      new Error(
-        "Quest Queue failed to started the quest in row " + row + ".",
-        { cause: data.error }
-      )
+
+  if (quest.active) {
+    let error = new Error(
+      "Quest Queue failed to start the quest in row " + row + ", because the party is already on a quest.",
+      { cause: data.error }
     );
 
-    // Try launching the next quest in the queue
-    row = row + 1;
-    let result = launchQuestInRow(row, spreadsheet);
+    throw error;
+  }
 
-    if (result !== false) {
-      // Retrigger this function for further processing
-      var trigger = ScriptApp.newTrigger('doPostTriggered').timeBased().after(1).create();
-      CacheService.getScriptCache().put(
-        trigger.getUniqueId(),
-        JSON.stringify(result)
-      );
-    }
+  if (quest.leader != userId && quest.leader != null) {
+    let error = new Error(
+      "Quest Queue failed to start the quest in row " + row + ", because another user sent a quest invite.",
+      { cause: data.error }
+    );
+
+    scheduleForceStart();
+
+    throw error;
+  }
+
+  if (quest.leader == userId) {
+    let error = new Error(
+      "Quest Queue failed to start the quest in row " + row + ", but the user sent another invitation. Retrying ...",
+      { cause: data.error }
+    );
+
+    notifyUserOfError(error);
+  }
+  else if (quest.leader == null) {
+    let error = new Error(
+      "Quest Queue failed to start the quest in row " + row + ". Trying next quest in queue ...",
+      { cause: data.error }
+    );
+
+    notifyUserOfError(error);
+
+    row = row + 1;
+  }
+
+  // Retry launching a quest
+  let result = launchQuestInRow(row, spreadsheet);
+
+  if (result !== false) {
+    // Retrigger this function for further processing
+    var trigger = ScriptApp.newTrigger('doPostTriggered').timeBased().after(1).create();
+    CacheService.getScriptCache().put(
+      trigger.getUniqueId(),
+      JSON.stringify(result)
+    );
   }
 }
 
