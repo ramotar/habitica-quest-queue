@@ -54,6 +54,8 @@ function processWebhookDelayed(type, data) {
 function processTrigger() {
   // [Authors] This function gets called by the example trigger.
   // - This is the place for recurrent tasks.
+
+  updateInventory();
 }
 
 function launchQuestInRow(row) {

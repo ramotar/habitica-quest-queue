@@ -72,6 +72,9 @@ function install() {
       // create webhooks
       createWebhooks();
 
+      // update the inventory
+      updateInventory();
+
       // save the time the installation was completed
       updateInstallTime();
 
@@ -117,7 +120,8 @@ function createTriggers() {
 
   ScriptApp.newTrigger("processTrigger")
     .timeBased()
-    .everyHours(1)
+    .atHour(14)
+    .everyDays(1)
     .create();
 }
 
