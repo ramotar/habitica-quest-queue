@@ -38,6 +38,7 @@ function processTrigger() {
 }
 
 function updateInventory() {
+  let queue = spreadsheet.getSheetByName(SPREADSHEET_TAB_NAME_QUEUE);
   let sheet = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_TEST);
   let oldies = spreadsheet.getSheetByName(SPREADSHEET_SHEET_NAME_OLDIES);
 
@@ -133,6 +134,17 @@ function updateInventory() {
         cell.setValue(questCount);
       }
     }
+  }
+
+  // Increase queue length back to 1000 rows
+  let rowCount = queue.getMaxRows();
+  if (rowCount < 1000) {
+    // Insert new rows
+    queue.insertRowsAfter(rowCount, 1000 - rowCount);
+
+    // Copy the last row to the new rows
+    let lastRow = queue.getRange(rowCount, 1, 1, queue.getMaxColumns());
+    lastRow.copyTo(queue.getRange(rowCount + 1, 1, 1000 - rowCount));
   }
 }
 
