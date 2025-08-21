@@ -1,5 +1,5 @@
 # Quest Queue by Turac
-This version of the **Quest Queue** is a port of the original [Quest Queue](https://habitica.fandom.com/wiki/Quest_Queue) by Snefferdy to the [Habitica GAS Template](https://habitica.fandom.com/wiki/Habitica_GAS_Template) by Turac.
+This version of the **Quest Queue** is a port of the original [Quest Queue](https://habitica.fandom.com/wiki/Quest_Queue) by [Snefferdy](https://habitica.com/profile/7d2dce0e-4197-407b-b40f-8b5530774486) to the [Habitica GAS Template](https://habitica.fandom.com/wiki/Habitica_GAS_Template) by Turac.
 
 ## Features
 This version basically features the same capabilities as the original script, but has some improvements:
@@ -14,7 +14,7 @@ For the installation follow the [installation instructions](https://habitica.fan
 Additional information and steps are given below.
 
 ### Getting the script
-You can find the source code of the script on [Google Apps Script](https://script.google.com/home/projects/169PoeLHqZnicfFkBoW1xreQxtWSx7Ch-_QT0W0VpYXMa3laQNwafquVh/edit).
+You can find the source code of the script on [Google Apps Script](https://script.google.com/home/projects/169PoeLHqZnicfFkBoW1xreQxtWSx7Ch-_QT0W0VpYXMa3laQNwafquVh).
 
 In addition you need the corresponding spreadsheet for the queue. Follow the instructions below:
 
@@ -50,8 +50,6 @@ Users and authors alike can contribute to this template and a hassle-free script
 |  |  |  |
 | :---: | :---: | --- |
 | :lady_beetle: | [Issues](https://github.com/ramotar/habitica-quest-queue/issues) | If you detect an issue, feel free to raise it |
-| :grey_question: | [Questions](https://github.com/ramotar/habitica-quest-queue/discussions/categories/q-a) | Any questions you have, are welcome |
-| :bulb: | [Suggestions](https://github.com/ramotar/habitica-quest-queue/discussions/categories/suggestions) | I will be happy to discuss your suggestions |
 
 ## Acknowledgement
-* This version is based on the original [Quest Queue](https://habitica.fandom.com/wiki/Quest_Queue) by Snefferdy
+* This version is based on the original [Quest Queue](https://habitica.fandom.com/wiki/Quest_Queue) by [Snefferdy](https://habitica.com/profile/7d2dce0e-4197-407b-b40f-8b5530774486)
