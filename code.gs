@@ -121,13 +121,15 @@ function launchQuestInRow(row, spreadsheet = null) {
         return false;
       }
 
-      errorString = response.getContentText();
+      throw new Error(response.getContentText());
     }
     else {
-      errorString = "Invalid link for launching a quest in row " + row + ": " + (questLink == "" ? "(empty string)" : questLink);
+      throw new Error("Invalid link for launching a quest in row " + row + ": " + (questLink == "" ? "(empty string)" : questLink));
     }
   }
   catch (error) {
+    notifyUserOfError(error);
+
     errorString = error.toString();
   }
 
