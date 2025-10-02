@@ -1,5 +1,5 @@
 /**
- * Quest Queue v1.0.0 by @Turac
+ * Quest Queue v1.0.1 by @Turac
  *
  * Based on Quest Queue (Release 1) by @Snefferdy:
  * https://habitica.fandom.com/wiki/Quest_Queue
@@ -160,19 +160,17 @@ function deleteTriggers() {
 function deleteWebhooks() {
   // [Authors] This function deletes all existing webhooks to your script
 
-  let response = api_fetch("https://habitica.com/api/v3/user/webhook", GET_PARAMS);
-  let obj = parseJSON(response);
-  let webhooks = obj.data;
+  let webhooks = api_getWebhooks();
 
   if (webhooks.length > 0) {
 
-    console.log("Deleting webhooks");
+    logInfo("Deleting webhooks");
 
     let webAppURL = getWebAppURL();
 
     for (let webhook of webhooks) {
       if (webhook.url == webAppURL) {
-        api_fetch("https://habitica.com/api/v3/user/webhook/" + webhook.id, DELETE_PARAMS);
+        api_deleteWebhook(webhook.id);
       }
     }
   }
@@ -200,7 +198,7 @@ function validateOptions() {
     valid = testCredentials();
   }
 
-  if (typeof SPREADSHEET_ID !== "string" ) {
+  if (typeof SPREADSHEET_ID !== "string") {
     logError("SPREADSHEET_ID must be a string equal to the ID of the Quest Queue sheet.\n\ne.g. const SPREADSHEET_ID = \"abc1234567\";\n\nYour Spreadsheet ID can be found in the sheet URL between /d/ ... /edit");
     valid = false;
   }
@@ -236,7 +234,7 @@ function validateOptions() {
   }
 
   if (!valid) {
-    logInfo("Please fix the above errors, create a new version of the deployment, and run the doOneTimeSetup() function again.\nIf you aren't sure how to do this, see \"Changing the Settings\" in the documentation for this script.");
+    logInfo("Please fix the above errors, create a new version of the deployment, and click \"Install\" again.\nIf you aren't sure how to do this, see \"Updating options\" in the documentation for this script.");
   }
 
   return valid;

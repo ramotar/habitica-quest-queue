@@ -1,8 +1,8 @@
 /**
- * Habitica: GAS Template v1.3.0 by @Turac
+ * Habitica: GAS Template v1.3.3 by @Turac
  *
- * See GitHub page for info & setup instructions:
- * https://github.com/ramotar/habitica-gas-template
+ * See Wiki page for info & setup instructions:
+ * https://habitica.fandom.com/wiki/Habitica_GAS_Template
  */
 
 /**
@@ -344,7 +344,7 @@ function api_createUserTask(task) {
  *
  * Returns all webhooks for the user.
  */
-function api_createWebhook() {
+function api_getWebhooks() {
   let response = api_fetch("https://habitica.com/api/v3/user/webhook", GET_PARAMS);
   let object = parseJSON(response);
   let webhooks = object.data;
