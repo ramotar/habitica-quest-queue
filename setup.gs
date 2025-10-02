@@ -1,5 +1,5 @@
 /**
- * Quest Queue v1.0.0 by @Turac
+ * Quest Queue v1.0.1 by @Turac
  *
  * Based on Quest Queue (Release 1) by @Snefferdy:
  * https://habitica.fandom.com/wiki/Quest_Queue
@@ -198,7 +198,7 @@ function validateOptions() {
     valid = testCredentials();
   }
 
-  if (typeof SPREADSHEET_ID !== "string" ) {
+  if (typeof SPREADSHEET_ID !== "string") {
     logError("SPREADSHEET_ID must be a string equal to the ID of the Quest Queue sheet.\n\ne.g. const SPREADSHEET_ID = \"abc1234567\";\n\nYour Spreadsheet ID can be found in the sheet URL between /d/ ... /edit");
     valid = false;
   }
