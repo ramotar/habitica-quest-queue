@@ -40,7 +40,7 @@ Since you haven't inserted their Launch Quest links yet, all columns are hidden.
 Now, you can see all your party members. The final step is to insert Launch Quest links in row 4 for those members, that are using the Launch Quest with Link script. On the next inventory update, those members won't be hidden again. This way you have a good overview over all quests available to the party via Launch Quest links.
 
 ### Using the queue
-Finally, you can use your queue. Simply go to the `Quest Queue` sheet and start chossing members in column A and their quests in column B.
+Finally, you can use your queue. Simply go to the `Quest Queue` sheet and start choosing members in column A and their quests in column B.
 
 When the current quest is finished, the queue will automatically invite the party to the first quest you selected and remove it from the queue.
 
