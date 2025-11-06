@@ -207,7 +207,7 @@ function updateInventory() {
 
     if (inventory.getRange(row, 2).getValue() != quest.key) {
       inventory.insertRowBefore(row);
-      inventory.getRange(row, 1, 2).setValues([
+      inventory.getRange(row, 1, 1, 2).setValues([
         [quest.text, quest.key]
       ]);
     }
