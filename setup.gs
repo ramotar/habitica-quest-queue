@@ -1,5 +1,5 @@
 /**
- * Quest Queue v1.0.2 by @Turac
+ * Quest Queue v1.0.3 by @Turac
  *
  * Based on Quest Queue (Release 1) by @Snefferdy:
  * https://habitica.fandom.com/wiki/Quest_Queue
